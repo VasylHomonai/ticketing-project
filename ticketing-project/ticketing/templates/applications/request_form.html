@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>
+    {% if is_edit %}
+        Редагувати заявку
+    {% else %}
+        Створити заявку
+    {% endif %}
+</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <table>
+        <tbody>
+            {% for field in form %}
+                <tr>
+                    <td>{{ field.label_tag }}</td>
+                    <td>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small>{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="form-buttons">
+        <a href="{% url 'request_list' %}" class="btn btn-secondary">Назад</a>
+
+        <button type="submit" class="btn">
+            {% if is_edit %}
+                Зберегти
+            {% else %}
+                Створити
+            {% endif %}
+        </button>
+    </div>
+</form>
+
+{% endblock %}

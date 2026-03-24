@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Список заявок{% endblock %}
+
+{% block content %}
+
+<div class="top-bar">
+    <h1>Список заявок</h1>
+
+    <!-- СТВОРЕННЯ ЗАЯВКИ -->
+    <div>
+        <a href="{% url 'request_create' %}" class="btn">
+            + Створити заявку
+        </a>
+    </div>
+</div>
+
+<!-- ФІЛЬТР -->
+<form method="get" class="filter-form">
+
+    <div class="filter-grid">
+        <!-- Заголовки -->
+        <div>Email</div>
+        <div>Статус</div>
+        <div>Пріоритет</div>
+
+        <!-- Поля -->
+        <div>{{ filter_form.employee_email }}</div>
+        <div>{{ filter_form.status }}</div>
+        <div>{{ filter_form.priority }}</div>
+    </div>
+
+    <div class="filter-bar">
+        <a href="{% url 'request_list' %}" class="btn btn-secondary">Скинути</a>
+        <button type="submit" class="btn">Застосувати</button>
+    </div>
+
+</form>
+
+<!-- ТАБЛИЦЯ -->
+<table>
+    <thead>
+    <tr>
+        <th>Ім'я</th>
+        <th>Email</th>
+        <th>Тип</th>
+
+        <th>
+            <a href="?{% for key, value in request.GET.items %}{% if key != 'sort' %}{{ key }}={{ value }}&{% endif %}{% endfor %}sort={% if current_sort_field == 'priority' and current_sort_direction == 'asc' %}-priority{% else %}priority{% endif %}">
+                Пріоритет
+                {% if current_sort_field == 'priority' %}
+                    {% if current_sort_direction == 'asc' %}↑{% else %}↓{% endif %}
+                {% endif %}
+            </a>
+        </th>
+
+        <th>
+            <a href="?{% for key, value in request.GET.items %}{% if key != 'sort' %}{{ key }}={{ value }}&{% endif %}{% endfor %}sort={% if current_sort_field == 'status' and current_sort_direction == 'asc' %}-status{% else %}status{% endif %}">
+                Статус
+                {% if current_sort_field == 'status' %}
+                    {% if current_sort_direction == 'asc' %}↑{% else %}↓{% endif %}
+                {% endif %}
+            </a>
+        </th>
+
+        <th>
+            <a href="?{% for key, value in request.GET.items %}{% if key != 'sort' %}{{ key }}={{ value }}&{% endif %}{% endfor %}sort={% if current_sort_field == 'created_at' and current_sort_direction == 'asc' %}-created_at{% else %}created_at{% endif %}">
+                Дата
+                {% if current_sort_field == 'created_at' %}
+                    {% if current_sort_direction == 'asc' %}↑{% else %}↓{% endif %}
+                {% endif %}
+            </a>
+        </th>
+    </tr>
+    </thead>
+
+    <tbody>
+        {% for req in requests %}
+            <tr onclick="window.location.href='{% url 'request_update' req.id %}'" style="cursor: pointer;">
+                <td>{{ req.employee_name }}</td>
+                <td>{{ req.employee_email }}</td>
+                <td>{{ req.get_request_type_display }}</td>
+                <td>{{ req.get_priority_display }}</td>
+                <td>{{ req.get_status_display }}</td>
+                <td>{{ req.created_at }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="6">Немає заявок</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

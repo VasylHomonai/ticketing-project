@@ -5,3 +5,5 @@ Ticketing is a web application built with Django and SQLite.
 ```
 python manage.py runserver 8090
 ```
+
+Open the app: http://127.0.0.1:8090/tickets/

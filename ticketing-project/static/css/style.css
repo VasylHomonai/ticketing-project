@@ -163,3 +163,13 @@ form textarea {
 form button.btn {
     float: right;
 }
+
+.error {
+    color: #dc3545;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.form-row {
+    margin-bottom: 15px;
+}
